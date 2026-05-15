@@ -1,0 +1,418 @@
+{
+  "name": "Research Stage",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM",
+          "mode": "list",
+          "cachedResultName": "Relay Content Pipeline",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 893516919,
+          "mode": "list",
+          "cachedResultName": "Content Requests",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit#gid=893516919"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        -720
+      ],
+      "id": "4dd01401-15c2-41e9-a1df-d67bcf2bba18",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "m02kPjYbWaX1eXQf",
+          "name": "Google Sheets Trigger OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2ac0f6b5-d453-4aab-9296-6c5592a0b011",
+              "name": "client",
+              "value": "={{$json[\"Client\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "5a3fd7ef-0547-40d2-85bc-bdb41cddd580",
+              "name": "topic",
+              "value": "={{$json[\"Topic\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "3fc14358-1662-4b92-b437-cf3e300b19af",
+              "name": "audience",
+              "value": "={{$json[\"Audience\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "c6c9e7b1-148a-4e12-84d2-e573e2a71469",
+              "name": "goal",
+              "value": "={{$json[\"Goal\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "9cb22675-c9b0-4ed2-946d-689cc6491a56",
+              "name": "tone",
+              "value": "={{$json[\"Tone\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "a094ac29-a403-40b8-a042-b940c2c9fe66",
+              "name": "platform",
+              "value": "={{$json[\"Platform\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "e4d69e1d-9138-41c6-9306-16c255de02a2",
+              "name": "status",
+              "value": "={{$json[\"Status\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "fe95f29f-569b-475a-aff3-83e9a222443e",
+              "name": "ai output",
+              "value": "={{$json[\"AI Output\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "78ed8b13-97a3-4caa-b6c8-585d2a11b338",
+              "name": "feedback loop",
+              "value": "={{$json[\"Feedback Loop\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "7d2fe79c-41c9-413f-aeb8-d8b3dfd78bcc",
+              "name": "final draft",
+              "value": "={{$json[\"Final Draft\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        368,
+        -720
+      ],
+      "id": "ffebbec6-ea83-4ecb-a8fd-346a417c6071",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "19888d5d-2146-4804-a816-ecacaf09eb90",
+              "leftValue": "={{ $json[\"status\"] }}",
+              "rightValue": "Pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        -480
+      ],
+      "id": "4fb26fae-95d9-4168-9b40-1cb28b745c4d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Client: {{$json[\"client\"]}}\n\nTopic: {{$json[\"topic\"]}}\n\nAudience: {{$json[\"audience\"]}}\n\nGoal: {{$json[\"goal\"]}}\n\nTone: {{$json[\"tone\"]}}\n\nPlatform: {{$json[\"platform\"]}}\n\nFeedback From Reviewer:\n{{$json[\"feedback loop\"]}}\n\nGenerate:\n\n1. 3 high-performing content angles\n2. 3 strong hooks\n3. Key audience pain points\n4. Messaging recommendations\n5. CTA ideas\n6. Suggested storytelling direction\n7. Risks or weak messaging to avoid\n\nFormat the output clearly for internal human review.",
+        "options": {
+          "systemMessage": "You are a senior B2B social media strategist working for Relay, a high-performance social media content agency.\n\nYour role is to research and generate strategic content insights for clients while maintaining high editorial quality, audience relevance, and brand consistency.\n\nYou are NOT writing the final post yet.\n\nYour task is to analyze the provided client brief and generate:\n\n- audience pain points\n- industry insights\n- content angles\n- strong hooks\n- emotional triggers\n- positioning ideas\n- CTA suggestions\n- engagement opportunities\n\nAll outputs must:\n\n- fit the client’s audience\n- align with the client’s tone of voice\n- support the client’s business goals\n- feel native to LinkedIn and modern B2B marketing\n- avoid generic AI language\n- avoid hype or spammy phrasing\n- prioritize clarity, credibility, and engagement\n\nAlways think like a strategic content consultant for SaaS startups and remote-first companies.\n\nOutput must be structured, concise, and easy for human reviewers to approve."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        272,
+        -496
+      ],
+      "id": "796f421b-2dd5-4302-bfbd-6119ac4554e0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        272,
+        -352
+      ],
+      "id": "8d2a7781-270c-4640-8cfb-bba0689f5b59",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM",
+          "mode": "list",
+          "cachedResultName": "Relay Content Pipeline",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 893516919,
+          "mode": "list",
+          "cachedResultName": "Content Requests",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit#gid=893516919"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "AI Output": "={{$json[\"output\"]}}",
+            "row_number": 2,
+            "Status": "Awaiting Approval"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Audience",
+              "displayName": "Audience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Goal",
+              "displayName": "Goal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tone",
+              "displayName": "Tone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Output",
+              "displayName": "AI Output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback Loop",
+              "displayName": "Feedback Loop",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Draft",
+              "displayName": "Final Draft",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        -176
+      ],
+      "id": "8733c071-8521-4a68-9621-6000199bf637",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sQ0hF47HfbVYYrDD",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "45193815-9110-434f-93e4-627da47c5647",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e68e35530faca3be56ffc446e07fb958efdde3c7aa8e1331cd28282642af7e4b"
+  },
+  "id": "jD2PRvbAD0N2mbqG",
+  "tags": []
+}

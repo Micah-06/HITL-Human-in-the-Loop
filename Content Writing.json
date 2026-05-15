@@ -1,0 +1,428 @@
+{
+  "name": "Content Writing",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM",
+          "mode": "list",
+          "cachedResultName": "Relay Content Pipeline",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 893516919,
+          "mode": "list",
+          "cachedResultName": "Content Requests",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit#gid=893516919"
+        },
+        "event": "rowUpdate",
+        "options": {
+          "columnsToWatch": [
+            "Status"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -688
+      ],
+      "id": "fb7a1d44-7571-4db3-baae-dcafa98003c0",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "m02kPjYbWaX1eXQf",
+          "name": "Google Sheets Trigger OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b7f9eee8-8976-4838-9409-e3f6c8ad39eb",
+              "leftValue": "={{$json[\"status\"]}}",
+              "rightValue": "Approved",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -64,
+        -368
+      ],
+      "id": "c8ccef6a-b78f-4564-b6fb-ced40960a6fd",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "15114120-a882-4897-be67-94a220834518",
+              "name": "client",
+              "value": "={{$json[\"Client\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "634813be-a7ba-49e6-8e6f-d4e262d03fc4",
+              "name": "topic",
+              "value": "={{$json[\"Topic\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "b887ea6f-5d83-4766-834a-e4a55820a50c",
+              "name": "audience",
+              "value": "={{$json[\"Audience\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "3e33e9dc-dfb3-42a7-b7b0-b8ef9e16af39",
+              "name": "goal",
+              "value": "={{$json[\"Goal\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "f568252d-2ecc-4f50-9b95-10682b1075d9",
+              "name": "tone",
+              "value": "={{$json[\"Tone\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "4958b90c-d59c-46d8-8a73-3e02ec837276",
+              "name": "platform",
+              "value": "={{$json[\"Platform\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "516b6882-0ba5-4aeb-af6e-7599f24649b2",
+              "name": "status",
+              "value": "={{$json[\"Status\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "7f601e53-0f80-4e2d-803b-e6097dba1126",
+              "name": "ai output",
+              "value": "={{$json[\"AI Output\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "21312c71-d8d3-4271-87c1-1c42a44c2d71",
+              "name": "feedback loop",
+              "value": "={{$json[\"Feedback Loop\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        -688
+      ],
+      "id": "8088892d-396a-44ec-8f17-333ac627698b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Client: {{$json[\"client\"]}}\nTopic: {{$json[\"topic\"]}}\nAudience: {{$json[\"audience\"]}}\nGoal: {{$json[\"goal\"]}}\nTone: {{$json[\"tone\"]}}\nPlatform: {{$json[\"platform\"]}}\nApproved Research:\n{{$json[\"ai_output\"]}}\nReviewer Feedback:\n{{$json[\"feedback loop\"]}}\n\nWrite:\n1. A polished LinkedIn post\n2. A strong opening hook\n3. Natural transitions\n4. A compelling ending\n5. A CTA that encourages discussion\n\nRequirements:\n- Keep formatting clean and readable\n- Use short paragraphs\n- Optimize for engagement and retention\n- Sound natural and authoritative\n- Make the content feel specific to the client’s audience\n- Ensure the post is publication-ready",
+        "options": {
+          "systemMessage": "You are an elite B2B social media copywriter at Relay.\nYour responsibility is to transform approved research and strategy into highly engaging, platform-native social media content.\n \nYou write like a top SaaS marketing strategist: \n- clear\n- concise\n- insightful\n- conversational\n- authority-driven\n- emotionally intelligent\n\nYour writing must:\n- match the client’s tone\n- resonate with startup founders, remote teams, and SaaS professionals\n- feel human-written\n- avoid robotic AI phrasing\n- maximize readability and engagement\n- prioritize strong openings and retention\n \nThe content should:\n- educate\n- provoke thought\n- create relatability\n- encourage engagement\n- support the client’s business goals\n \nDo NOT use: \n- clichés\n- generic motivational phrases\n- excessive emojis \n- overhyped marketing language\nWrite with the quality of a premium LinkedIn ghostwriter."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        240,
+        -384
+      ],
+      "id": "bff8584f-cfff-49d2-b643-bb583ee1c54c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM",
+          "mode": "list",
+          "cachedResultName": "Relay Content Pipeline",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 893516919,
+          "mode": "list",
+          "cachedResultName": "Content Requests",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit#gid=893516919"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": 2,
+            "Final Draft": "={{$json[\"output\"]}}",
+            "Topic": "=",
+            "Status": "Awaiting Final Approval"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Audience",
+              "displayName": "Audience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Goal",
+              "displayName": "Goal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tone",
+              "displayName": "Tone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Output",
+              "displayName": "AI Output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Feedback Loop",
+              "displayName": "Feedback Loop",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Draft",
+              "displayName": "Final Draft",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        32,
+        -112
+      ],
+      "id": "ec029800-759c-41f5-830e-03e424d11e6e",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sQ0hF47HfbVYYrDD",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        -160
+      ],
+      "id": "6746fc44-1727-459b-b351-2a328b69ffd7",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "6a7q9wqllN7oPiDj",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3624e234-882f-4a94-98da-75f60a3d311f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e68e35530faca3be56ffc446e07fb958efdde3c7aa8e1331cd28282642af7e4b"
+  },
+  "id": "SoBIebke0E4w8Klh",
+  "tags": []
+}

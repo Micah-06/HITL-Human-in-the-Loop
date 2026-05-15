@@ -1,0 +1,337 @@
+{
+  "name": "Publishing Stage",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM",
+          "mode": "list",
+          "cachedResultName": "Relay Content Pipeline",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 893516919,
+          "mode": "list",
+          "cachedResultName": "Content Requests",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit#gid=893516919"
+        },
+        "event": "rowUpdate",
+        "options": {
+          "columnsToWatch": [
+            "Status"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0edc7116-ec3e-4d4c-a3aa-33ad2d505939",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "m02kPjYbWaX1eXQf",
+          "name": "Google Sheets Trigger OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ce7a082-59f8-442a-a73e-dfde4c1540b9",
+              "name": "client",
+              "value": "={{$json[\"Client\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "c26c28d1-cd36-4d12-9da0-ba5583f1743f",
+              "name": "topic",
+              "value": "={{$json[\"Topic\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "ac59dbb1-b51e-479e-aed9-93420df2ae4e",
+              "name": "platform",
+              "value": "={{$json[\"Platform\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "4942b1b4-2789-4c1d-ae26-e7be19a6577e",
+              "name": "status",
+              "value": "={{$json[\"Status\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "f92bce1d-835a-4b77-86e3-d949ee8173cc",
+              "name": "final draft",
+              "value": "={{$json[\"Final Draft\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "e1024af6-3545-4bb9-8d75-646b1caf1508",
+              "name": "feedback loop",
+              "value": "={{$json[\"Feedback Loop\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "121a8600-5c43-47c8-92de-898a6184054b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "195c420f-82d9-4f6f-abdf-45e2bf99e462",
+              "leftValue": "={{$json[\"status\"]}}",
+              "rightValue": "Final Approved",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        368,
+        0
+      ],
+      "id": "09f72b0d-cefc-4869-b2d6-f23a65f04aca",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM",
+          "mode": "list",
+          "cachedResultName": "Relay Content Pipeline",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 893516919,
+          "mode": "list",
+          "cachedResultName": "Content Requests",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12c_qyHNCPfCIu9iWt2Jad7wmOnASwBGlIjX4vrMI6NM/edit#gid=893516919"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Published",
+            "Topic": "",
+            "row_number": 2
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Client",
+              "displayName": "Client",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Audience",
+              "displayName": "Audience",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Goal",
+              "displayName": "Goal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tone",
+              "displayName": "Tone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI Output",
+              "displayName": "AI Output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback Loop",
+              "displayName": "Feedback Loop",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Draft",
+              "displayName": "Final Draft",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        576,
+        -96
+      ],
+      "id": "e4066409-811f-49ea-84fa-6f95494bbe54",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sQ0hF47HfbVYYrDD",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "654aff1b-baa2-444d-a5e1-36efa1f09d6f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e68e35530faca3be56ffc446e07fb958efdde3c7aa8e1331cd28282642af7e4b"
+  },
+  "id": "j5AIKmLrRQy1HqzQ",
+  "tags": []
+}
